@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-gradient-to-b from-peach-50 via-mint-50 to-sky-50 text-ink antialiased;
+}
