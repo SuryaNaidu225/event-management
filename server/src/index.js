@@ -109,14 +109,18 @@ app.post("/api/events/:id/register", async (req, res) => {
 
 // Admin: login
 app.post("/api/admin/login", async (req, res) => {
-  const { email, password } = req.body;
-  if (!email || !password) {
+  // Validate and normalize input
+  let { email, password } = req.body || {};
+  if (typeof email !== "string" || typeof password !== "string") {
     return res.status(400).json({ message: "Email and password are required" });
   }
 
+  email = email.trim().toLowerCase();
+
   try {
     const admin = await prisma.admin.findUnique({ where: { email } });
-    if (!admin) {
+    if (!admin || typeof admin.password !== "string") {
+      // Avoid exposing which part failed
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
@@ -130,7 +134,7 @@ app.post("/api/admin/login", async (req, res) => {
     });
     res.json({ token });
   } catch (err) {
-    console.error(err);
+    console.error("Admin login error:", err);
     res.status(500).json({ message: "Login failed" });
   }
 });

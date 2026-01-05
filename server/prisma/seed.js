@@ -7,13 +7,14 @@ async function main() {
   // Create default admin user
   const hashedPassword = await bcrypt.hash("suri#345", 10);
 
+  const adminEmail = "admin@gmail.com".toLowerCase();
   const admin = await prisma.admin.upsert({
-    where: { email: "admin@gmail.com" },
+    where: { email: adminEmail },
     update: {
-      password: hashedPassword, // Update password if admin exists
+      password: hashedPassword,
     },
     create: {
-      email: "admin@gmail.com",
+      email: adminEmail,
       password: hashedPassword,
     },
   });
@@ -97,11 +98,15 @@ async function main() {
   ];
 
   for (const event of events) {
-    await prisma.event.upsert({
+    // Use findFirst + create/update to avoid requiring a unique constraint on title
+    const existing = await prisma.event.findFirst({
       where: { title: event.title },
-      update: event,
-      create: event,
     });
+    if (existing) {
+      await prisma.event.update({ where: { id: existing.id }, data: event });
+    } else {
+      await prisma.event.create({ data: event });
+    }
   }
 
   console.log(`Seeded ${events.length} events`);
