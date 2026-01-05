@@ -209,21 +209,29 @@ password String
 createdAt DateTime @default(now())
 }
 
-7. API Endpoints Summary
-   User API
-   Method Endpoint Description
-   GET /api/events List all events
-   GET /api/events/:id Event details
-   POST /api/events/:id/register Register for event
-   Admin API
-   Method Endpoint Description
-   POST /api/admin/login Admin login
-   POST /api/admin/events Add event
-   PUT /api/admin/events/:id Update event
-   DELETE /api/admin/events/:id Delete event
-   GET /api/admin/registrations View registrations
-8. UI/UX Requirements
-   User Screens
+## Vercel deployment notes
+
+- Frontend uses the `VITE_API_BASE_URL` environment variable (Vite) to determine the API base URL.
+- In production on Vercel set `VITE_API_BASE_URL` to your backend URL (e.g. `https://your-backend.example.com`).
+- If your backend is served from the same origin as the frontend (e.g. backend deployed as Vercel Serverless Functions under `/api`), set `VITE_API_BASE_URL` to an empty string or omit it — the app will fall back to the same origin.
+- Ensure backend environment variables like `DATABASE_URL` and `JWT_SECRET` are configured in your backend deployment.
+
+Example Vercel env settings:
+
+`VITE_API_BASE_URL` = `https://your-backend.example.com` // or empty for same-origin 7. API Endpoints Summary
+User API
+Method Endpoint Description
+GET /api/events List all events
+GET /api/events/:id Event details
+POST /api/events/:id/register Register for event
+Admin API
+Method Endpoint Description
+POST /api/admin/login Admin login
+POST /api/admin/events Add event
+PUT /api/admin/events/:id Update event
+DELETE /api/admin/events/:id Delete event
+GET /api/admin/registrations View registrations 8. UI/UX Requirements
+User Screens
 
 Home (list of events)
 
