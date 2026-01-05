@@ -10,7 +10,10 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import "./App.css";
 
-const API_BASE_URL = "http://localhost:4000";
+// Use Vite environment variable when available (set `VITE_API_BASE_URL` in Vercel).
+// If not provided, fall back to localhost for local dev.
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:4000";
 
 function Layout({ children }) {
   return (
